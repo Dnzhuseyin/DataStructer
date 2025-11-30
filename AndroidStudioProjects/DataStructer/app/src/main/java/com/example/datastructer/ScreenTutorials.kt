@@ -8,26 +8,66 @@ import androidx.compose.ui.platform.LocalContext
 // Tutorial steps for each screen
 object ScreenTutorials {
 
-    fun getRedBlackTreeTutorial(): List<TutorialStep> = listOf(
-        TutorialStep(
+    fun getRedBlackTreeTutorial(): List<SpotlightTarget> = listOf(
+        SpotlightTarget(
+            elementId = "rbt_welcome",
             title = "Red-Black Tree 🔴⚫",
-            description = "Red-Black Tree, dengeli bir ikili arama ağacıdır. Her düğüm kırmızı veya siyah renge sahiptir ve belirli kurallara uyar."
+            description = "Red-Black Tree, dengeli bir ikili arama ağacıdır. Her düğüm kırmızı veya siyah renge sahiptir ve belirli kurallara uyar.",
+            calloutPosition = HighlightPosition.CENTER
         ),
-        TutorialStep(
-            title = "Değer Ekleme ➕",
-            description = "Üst paneldeki giriş alanına bir sayı yazın ve '+' butonuna tıklayarak ağaca ekleyin. Ağaç otomatik olarak dengelenecektir."
+        SpotlightTarget(
+            elementId = "rbt_input_field",
+            title = "Değer Giriş Alanı ✍️",
+            description = "Buraya eklemek veya silmek istediğiniz sayıyı yazın. Sadece tam sayı değerleri kabul edilir.",
+            calloutPosition = HighlightPosition.BOTTOM_CENTER
         ),
-        TutorialStep(
-            title = "Değer Silme ➖",
-            description = "Silmek istediğiniz değeri girin ve 'çöp kutusu' ikonuna tıklayın. Ağaç yeniden dengelenecektir."
+        SpotlightTarget(
+            elementId = "rbt_add_button",
+            title = "Ekleme Butonu ➕",
+            description = "Bu butona tıklayarak girdiğiniz değeri ağaca ekleyin. Ağaç otomatik olarak dengelenecektir.",
+            calloutPosition = HighlightPosition.BOTTOM_CENTER
         ),
-        TutorialStep(
-            title = "Yakınlaştırma/Uzaklaştırma 🔍",
-            description = "Büyütme ve küçültme butonları ile ağacı daha iyi görebilirsiniz. Sıfırla butonu ile görünümü varsayılana döndürebilirsiniz."
+        SpotlightTarget(
+            elementId = "rbt_delete_button",
+            title = "Silme Butonu 🗑️",
+            description = "Girdiğiniz değeri ağaçtan silmek için bu çöp kutusu ikonuna tıklayın. Ağaç yeniden dengelenecektir.",
+            calloutPosition = HighlightPosition.BOTTOM_CENTER
         ),
-        TutorialStep(
-            title = "Açıklamalar 💡",
-            description = "Alt panelde her işlemin detaylı açıklamasını görebilirsiniz. Bu sayede algoritmanın nasıl çalıştığını anlayabilirsiniz."
+        SpotlightTarget(
+            elementId = "rbt_zoom_in",
+            title = "Yakınlaştırma 🔍",
+            description = "Ağacı büyüterek düğümleri daha net görebilirsiniz.",
+            calloutPosition = HighlightPosition.BOTTOM_LEFT
+        ),
+        SpotlightTarget(
+            elementId = "rbt_zoom_out",
+            title = "Uzaklaştırma 🔎",
+            description = "Ağacın tamamını görmek için uzaklaştırabilirsiniz.",
+            calloutPosition = HighlightPosition.BOTTOM_LEFT
+        ),
+        SpotlightTarget(
+            elementId = "rbt_reset_zoom",
+            title = "Zoom Sıfırlama 🔄",
+            description = "Görünümü varsayılan zoom seviyesine döndürür.",
+            calloutPosition = HighlightPosition.BOTTOM_LEFT
+        ),
+        SpotlightTarget(
+            elementId = "rbt_clear",
+            title = "Temizleme 🧹",
+            description = "Tüm ağacı temizleyerek sıfırdan başlamanızı sağlar.",
+            calloutPosition = HighlightPosition.BOTTOM_LEFT
+        ),
+        SpotlightTarget(
+            elementId = "rbt_canvas",
+            title = "Görselleştirme Alanı 🎨",
+            description = "Burası ağacın görüntülendiği alandır. Parmağınızla sürükleyerek ağacı hareket ettirebilirsiniz.",
+            calloutPosition = HighlightPosition.TOP_CENTER
+        ),
+        SpotlightTarget(
+            elementId = "rbt_explanation",
+            title = "Adım Adım Açıklamalar 💡",
+            description = "Her işlemin detaylı açıklamasını burada görebilirsiniz. Algoritmanın nasıl çalıştığını öğrenin!",
+            calloutPosition = HighlightPosition.TOP_CENTER
         )
     )
 
@@ -166,11 +206,12 @@ object ScreenTutorials {
     )
 }
 
-// Composable function to show tutorial for a specific screen
+// Composable function to show tutorial for a specific screen with spotlight
 @Composable
 fun ShowScreenTutorial(
     screenName: String,
-    steps: List<TutorialStep>,
+    targets: List<SpotlightTarget>,
+    targetPositions: Map<String, Rect>,
     onComplete: () -> Unit
 ) {
     val context = LocalContext.current
@@ -179,8 +220,9 @@ fun ShowScreenTutorial(
     }
 
     if (showTutorial) {
-        TutorialOverlay(
-            steps = steps,
+        SpotlightTutorial(
+            targets = targets,
+            targetPositions = targetPositions,
             onComplete = {
                 TutorialPreferences.setTutorialCompleted(context, screenName)
                 showTutorial = false

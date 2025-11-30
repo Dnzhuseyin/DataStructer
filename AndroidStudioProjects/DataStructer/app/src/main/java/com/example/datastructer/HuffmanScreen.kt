@@ -21,12 +21,13 @@ fun HuffmanScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var inputValue by remember { mutableStateOf("") }
     var showExplanations by remember { mutableStateOf(true) }
 
-    // Show tutorial on first visit
-    ShowScreenTutorial(
-        screenName = "huffman_coding",
-        steps = ScreenTutorials.getHuffmanCodingTutorial(),
-        onComplete = { }
-    )
+    // TODO: Update to use spotlight tutorial
+    // ShowScreenTutorial(
+    //     screenName = "huffman_coding",
+    //     targets = ScreenTutorials.getHuffmanCodingTutorial(),
+    //     targetPositions = emptyMap(),
+    //     onComplete = { }
+    // )
 
     Scaffold(
         topBar = {

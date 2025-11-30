@@ -31,11 +31,19 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import kotlinx.coroutines.delay
 
+enum class HighlightPosition {
+    TOP_LEFT, TOP_CENTER, TOP_RIGHT,
+    CENTER_LEFT, CENTER, CENTER_RIGHT,
+    BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
+}
+
 data class TutorialStep(
     val title: String,
     val description: String,
     val highlightArea: Rect? = null, // Vurgulanacak alan
-    val arrowPosition: Offset? = null // Ok işareti konumu
+    val arrowPosition: Offset? = null, // Ok işareti konumu
+    val targetElementId: String? = null, // Hedef UI element ID
+    val calloutPosition: HighlightPosition = HighlightPosition.BOTTOM_CENTER // Callout pozisyonu
 )
 
 @Composable

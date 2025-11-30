@@ -65,6 +65,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.datastructer.ui.theme.DataStructerTheme
+import androidx.compose.ui.geometry.Rect
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -447,11 +448,17 @@ fun RedBlackTreeScreen(
     viewModel: TreeViewModel = viewModel()
 ) {
     var inputValue by remember { mutableStateOf("") }
+    var targetPositions by remember { mutableStateOf<Map<String, androidx.compose.ui.geometry.Rect>>(emptyMap()) }
+
+    val updatePosition: (String, androidx.compose.ui.geometry.Rect) -> Unit = { id, rect ->
+        targetPositions = targetPositions + (id to rect)
+    }
 
     // Show tutorial on first visit
     ShowScreenTutorial(
         screenName = "red_black_tree",
-        steps = ScreenTutorials.getRedBlackTreeTutorial(),
+        targets = ScreenTutorials.getRedBlackTreeTutorial(),
+        targetPositions = targetPositions,
         onComplete = { }
     )
 
@@ -465,11 +472,15 @@ fun RedBlackTreeScreen(
             onZoomOutClick = viewModel::zoomOut,
             onResetZoomClick = viewModel::resetZoom,
             onClearClick = viewModel::clearTree,
-            title = "Red-Black Tree Kontrolü"
+            title = "Red-Black Tree Kontrolü",
+            elementIdPrefix = "rbt",
+            onPositionChanged = updatePosition
         )
 
         CanvasCard(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .tutorialTarget("rbt_canvas", updatePosition),
             title = "Red-Black Tree Görselleştirme"
         ) {
             TreeCanvas(
@@ -484,7 +495,9 @@ fun RedBlackTreeScreen(
 
         ExplanationPanel(
             explanations = viewModel.explanations,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .tutorialTarget("rbt_explanation", updatePosition)
         )
     }
 }
@@ -497,12 +510,13 @@ fun HeapScreen(
 ) {
     var inputValue by remember { mutableStateOf("") }
 
-    // Show tutorial on first visit
-    ShowScreenTutorial(
-        screenName = "max_heap",
-        steps = ScreenTutorials.getMaxHeapTutorial(),
-        onComplete = { }
-    )
+    // TODO: Update to use spotlight tutorial
+    // ShowScreenTutorial(
+    //     screenName = "max_heap",
+    //     targets = ScreenTutorials.getMaxHeapTutorial(),
+    //     targetPositions = emptyMap(),
+    //     onComplete = { }
+    // )
 
     BaseStructureScreen("Max Heap", onBackClick, modifier) {
         HeapControlPanel(
@@ -546,12 +560,13 @@ fun AVLScreen(
 ) {
     var inputValue by remember { mutableStateOf("") }
 
-    // Show tutorial on first visit
-    ShowScreenTutorial(
-        screenName = "avl_tree",
-        steps = ScreenTutorials.getAVLTreeTutorial(),
-        onComplete = { }
-    )
+    // TODO: Update to use spotlight tutorial
+    // ShowScreenTutorial(
+    //     screenName = "avl_tree",
+    //     targets = ScreenTutorials.getAVLTreeTutorial(),
+    //     targetPositions = emptyMap(),
+    //     onComplete = { }
+    // )
 
     BaseStructureScreen("AVL Tree", onBackClick, modifier) {
         ControlPanel(
@@ -596,12 +611,13 @@ fun SplayScreen(
 ) {
     var inputValue by remember { mutableStateOf("") }
 
-    // Show tutorial on first visit
-    ShowScreenTutorial(
-        screenName = "splay_tree",
-        steps = ScreenTutorials.getSplayTreeTutorial(),
-        onComplete = { }
-    )
+    // TODO: Update to use spotlight tutorial
+    // ShowScreenTutorial(
+    //     screenName = "splay_tree",
+    //     targets = ScreenTutorials.getSplayTreeTutorial(),
+    //     targetPositions = emptyMap(),
+    //     onComplete = { }
+    // )
 
     BaseStructureScreen("Splay Tree", onBackClick, modifier) {
         ControlPanel(
@@ -646,12 +662,13 @@ fun HashTableScreen(
 ) {
     var inputValue by remember { mutableStateOf("") }
 
-    // Show tutorial on first visit
-    ShowScreenTutorial(
-        screenName = "hash_table",
-        steps = ScreenTutorials.getHashTableTutorial(),
-        onComplete = { }
-    )
+    // TODO: Update to use spotlight tutorial
+    // ShowScreenTutorial(
+    //     screenName = "hash_table",
+    //     targets = ScreenTutorials.getHashTableTutorial(),
+    //     targetPositions = emptyMap(),
+    //     onComplete = { }
+    // )
 
     BaseStructureScreen("Hash Table", onBackClick, modifier) {
         Card(
@@ -817,7 +834,9 @@ fun ControlPanel(
     onResetZoomClick: () -> Unit,
     onClearClick: () -> Unit,
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
+    elementIdPrefix: String = "",
+    onPositionChanged: (String, androidx.compose.ui.geometry.Rect) -> Unit = { _, _ -> }
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -870,12 +889,22 @@ fun ControlPanel(
                         value = inputValue,
                         onValueChange = { if (it.isEmpty() || it.all { c -> c.isDigit() || c == '-' }) onInputValueChange(it) },
                         label = { Text("Değer Girin") },
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .tutorialTarget(
+                                "${elementIdPrefix}_input_field",
+                                onPositionChanged
+                            ),
                         singleLine = true,
                         shape = RoundedCornerShape(12.dp)
                     )
                     Card(
-                        modifier = Modifier.size(48.dp),
+                        modifier = Modifier
+                            .size(48.dp)
+                            .tutorialTarget(
+                                "${elementIdPrefix}_add_button",
+                                onPositionChanged
+                            ),
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = if (inputValue.isNotBlank())
@@ -896,7 +925,12 @@ fun ControlPanel(
                         }
                     }
                     Card(
-                        modifier = Modifier.size(48.dp),
+                        modifier = Modifier
+                            .size(48.dp)
+                            .tutorialTarget(
+                                "${elementIdPrefix}_delete_button",
+                                onPositionChanged
+                            ),
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = if (inputValue.isNotBlank())
@@ -923,7 +957,12 @@ fun ControlPanel(
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedButton(
                     onClick = onZoomInClick,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .tutorialTarget(
+                            "${elementIdPrefix}_zoom_in",
+                            onPositionChanged
+                        ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Icon(Icons.Default.ZoomIn, "Zoom In", modifier = Modifier.size(20.dp))
@@ -932,7 +971,12 @@ fun ControlPanel(
                 }
                 OutlinedButton(
                     onClick = onZoomOutClick,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .tutorialTarget(
+                            "${elementIdPrefix}_zoom_out",
+                            onPositionChanged
+                        ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Icon(Icons.Default.ZoomOut, "Zoom Out", modifier = Modifier.size(20.dp))
@@ -945,7 +989,12 @@ fun ControlPanel(
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedButton(
                     onClick = onResetZoomClick,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .tutorialTarget(
+                            "${elementIdPrefix}_reset_zoom",
+                            onPositionChanged
+                        ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Icon(Icons.Default.Refresh, "Reset", modifier = Modifier.size(20.dp))
@@ -954,7 +1003,12 @@ fun ControlPanel(
                 }
                 Button(
                     onClick = onClearClick,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .tutorialTarget(
+                            "${elementIdPrefix}_clear",
+                            onPositionChanged
+                        ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     ),

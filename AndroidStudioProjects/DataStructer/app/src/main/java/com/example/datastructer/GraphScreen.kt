@@ -29,12 +29,13 @@ fun GraphScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var weight by remember { mutableStateOf("1") }
     var showExplanations by remember { mutableStateOf(false) }
 
-    // Show tutorial on first visit
-    ShowScreenTutorial(
-        screenName = "graph_algorithms",
-        steps = ScreenTutorials.getGraphAlgorithmsTutorial(),
-        onComplete = { }
-    )
+    // TODO: Update to use spotlight tutorial
+    // ShowScreenTutorial(
+    //     screenName = "graph_algorithms",
+    //     targets = ScreenTutorials.getGraphAlgorithmsTutorial(),
+    //     targetPositions = emptyMap(),
+    //     onComplete = { }
+    // )
 
     LaunchedEffect(Unit) {
         viewModel.createSampleGraph()
