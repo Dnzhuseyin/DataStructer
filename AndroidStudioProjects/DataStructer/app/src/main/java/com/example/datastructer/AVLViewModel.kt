@@ -26,6 +26,7 @@ class AVLViewModel : ViewModel() {
         rootNode = tree.root
         explanations = steps
         visualizationVersion++
+        resetZoom() // Ağacı ortala
     }
 
     fun delete(key: Int) {
@@ -34,6 +35,7 @@ class AVLViewModel : ViewModel() {
         rootNode = tree.root
         explanations = steps
         visualizationVersion++
+        resetZoom() // Ağacı ortala
     }
     
     fun zoomIn() { zoomLevel = (zoomLevel * 1.2f).coerceAtMost(3.0f) }

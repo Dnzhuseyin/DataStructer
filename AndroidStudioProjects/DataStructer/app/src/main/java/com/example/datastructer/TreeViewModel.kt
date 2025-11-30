@@ -74,6 +74,9 @@ class TreeViewModel : ViewModel() {
 
         // Görselleştirme versiyonunu artır - recomposition tetikler
         visualizationVersion++
+
+        // Ağacı ortala
+        resetZoom()
     }
     
     /**
@@ -96,6 +99,9 @@ class TreeViewModel : ViewModel() {
 
         // Görselleştirme versiyonunu artır - recomposition tetikler
         visualizationVersion++
+
+        // Ağacı ortala
+        resetZoom()
     }
     
     /**

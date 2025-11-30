@@ -65,6 +65,7 @@ class HeapViewModel : ViewModel() {
         rootNode = heap.root
         explanations = steps
         visualizationVersion++
+        resetZoom() // Heap'i ortala
     }
 
     fun extractMax() {
@@ -73,6 +74,7 @@ class HeapViewModel : ViewModel() {
         rootNode = heap.root
         explanations = steps
         visualizationVersion++
+        resetZoom() // Heap'i ortala
     }
 
     fun delete(key: Int) {
@@ -81,6 +83,7 @@ class HeapViewModel : ViewModel() {
         rootNode = heap.root
         explanations = steps
         visualizationVersion++
+        resetZoom() // Heap'i ortala
     }
     
     /**

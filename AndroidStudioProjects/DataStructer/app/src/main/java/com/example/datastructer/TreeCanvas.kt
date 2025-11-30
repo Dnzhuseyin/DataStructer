@@ -27,7 +27,8 @@ fun TreeCanvas(
     offsetX: Float,
     offsetY: Float,
     onOffsetChange: (Float, Float) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    key: Int = 0 // Trigger recomposition when tree changes
 ) {
     val textMeasurer = rememberTextMeasurer()
     val surfaceColor = MaterialTheme.colorScheme.surface

@@ -489,7 +489,8 @@ fun RedBlackTreeScreen(
                 offsetX = viewModel.offsetX,
                 offsetY = viewModel.offsetY,
                 onOffsetChange = viewModel::updateOffset,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                key = viewModel.visualizationVersion // Force recomposition on tree changes
             )
         }
 
@@ -541,7 +542,8 @@ fun HeapScreen(
                 offsetX = viewModel.offsetX,
                 offsetY = viewModel.offsetY,
                 onOffsetChange = viewModel::updateOffset,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                key = viewModel.visualizationVersion // Force recomposition
             )
         }
 
