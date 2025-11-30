@@ -126,12 +126,38 @@ class HeapViewModel : ViewModel() {
      */
     private fun calculateCoordinates() {
         val root = heap.root ?: return
-        
-        // Canvas genişliği (varsayılan)
-        val canvasWidth = 1200f
-        
-        // Koordinatları hesapla (merkezden başlayarak)
-        calculateTreeLayout(root, canvasWidth / 2, 100f, canvasWidth / 2, 0)
+
+        // Önce heap'i 0,0 noktasından başlayarak hesapla
+        calculateTreeLayout(root, 0f, 100f, 800f, 0)
+
+        // Heap'in minimum ve maksimum x değerlerini bul
+        val bounds = findTreeBounds(root)
+
+        // Heap'i merkeze almak için offset hesapla
+        val treeWidth = bounds.second - bounds.first
+        val centerOffset = -treeWidth / 2 - bounds.first
+
+        // Tüm düğümleri merkeze kaydır
+        applyOffset(root, centerOffset)
+    }
+
+    private fun findTreeBounds(node: HeapNode?): Pair<Float, Float> {
+        if (node == null) return Pair(Float.MAX_VALUE, Float.MIN_VALUE)
+        val leftBounds = findTreeBounds(node.left)
+        val rightBounds = findTreeBounds(node.right)
+        val minX = minOf(node.x, leftBounds.first, rightBounds.first)
+        val maxX = maxOf(node.x, leftBounds.second, rightBounds.second)
+        return Pair(
+            if (minX == Float.MAX_VALUE) node.x else minX,
+            if (maxX == Float.MIN_VALUE) node.x else maxX
+        )
+    }
+
+    private fun applyOffset(node: HeapNode?, offset: Float) {
+        if (node == null) return
+        node.x += offset
+        applyOffset(node.left, offset)
+        applyOffset(node.right, offset)
     }
     
     /**
