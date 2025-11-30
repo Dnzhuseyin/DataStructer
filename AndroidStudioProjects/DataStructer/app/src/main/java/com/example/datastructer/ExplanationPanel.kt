@@ -47,7 +47,7 @@ fun ExplanationPanel(
     modifier: Modifier = Modifier,
     onClear: () -> Unit = {}
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(true) } // Varsayılan olarak açık
 
     Card(
         modifier = modifier.fillMaxWidth(),

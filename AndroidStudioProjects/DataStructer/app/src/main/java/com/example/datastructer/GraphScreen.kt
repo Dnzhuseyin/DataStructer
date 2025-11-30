@@ -27,7 +27,7 @@ fun GraphScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var fromNode by remember { mutableStateOf("") }
     var toNode by remember { mutableStateOf("") }
     var weight by remember { mutableStateOf("1") }
-    var showExplanations by remember { mutableStateOf(false) }
+    var showExplanations by remember { mutableStateOf(true) } // Varsayılan olarak açık
 
     // TODO: Update to use spotlight tutorial
     // ShowScreenTutorial(
