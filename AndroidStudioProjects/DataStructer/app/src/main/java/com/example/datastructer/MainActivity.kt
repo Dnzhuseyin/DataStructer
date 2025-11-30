@@ -62,6 +62,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.datastructer.ui.theme.DataStructerTheme
 
@@ -81,7 +82,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun DataStructureApp(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     var selectedStructure by remember { mutableStateOf<DataStructureType?>(null) }
+    var showWelcomeTutorial by remember {
+        mutableStateOf(TutorialPreferences.isFirstLaunch(context))
+    }
+
+    // Welcome tutorial for first launch
+    if (showWelcomeTutorial) {
+        WelcomeTutorial(
+            onComplete = {
+                TutorialPreferences.setFirstLaunchCompleted(context)
+                showWelcomeTutorial = false
+            }
+        )
+    }
 
     Crossfade(targetState = selectedStructure, label = "screen_crossfade") { screen ->
         when (screen) {
@@ -433,6 +448,13 @@ fun RedBlackTreeScreen(
 ) {
     var inputValue by remember { mutableStateOf("") }
 
+    // Show tutorial on first visit
+    ShowScreenTutorial(
+        screenName = "red_black_tree",
+        steps = ScreenTutorials.getRedBlackTreeTutorial(),
+        onComplete = { }
+    )
+
     BaseStructureScreen("Red-Black Tree", onBackClick, modifier) {
         ControlPanel(
             inputValue = inputValue,
@@ -475,6 +497,13 @@ fun HeapScreen(
 ) {
     var inputValue by remember { mutableStateOf("") }
 
+    // Show tutorial on first visit
+    ShowScreenTutorial(
+        screenName = "max_heap",
+        steps = ScreenTutorials.getMaxHeapTutorial(),
+        onComplete = { }
+    )
+
     BaseStructureScreen("Max Heap", onBackClick, modifier) {
         HeapControlPanel(
             inputValue = inputValue,
@@ -516,6 +545,13 @@ fun AVLScreen(
     viewModel: AVLViewModel = viewModel()
 ) {
     var inputValue by remember { mutableStateOf("") }
+
+    // Show tutorial on first visit
+    ShowScreenTutorial(
+        screenName = "avl_tree",
+        steps = ScreenTutorials.getAVLTreeTutorial(),
+        onComplete = { }
+    )
 
     BaseStructureScreen("AVL Tree", onBackClick, modifier) {
         ControlPanel(
@@ -560,6 +596,13 @@ fun SplayScreen(
 ) {
     var inputValue by remember { mutableStateOf("") }
 
+    // Show tutorial on first visit
+    ShowScreenTutorial(
+        screenName = "splay_tree",
+        steps = ScreenTutorials.getSplayTreeTutorial(),
+        onComplete = { }
+    )
+
     BaseStructureScreen("Splay Tree", onBackClick, modifier) {
         ControlPanel(
             inputValue = inputValue,
@@ -602,6 +645,13 @@ fun HashTableScreen(
     viewModel: HashViewModel = viewModel()
 ) {
     var inputValue by remember { mutableStateOf("") }
+
+    // Show tutorial on first visit
+    ShowScreenTutorial(
+        screenName = "hash_table",
+        steps = ScreenTutorials.getHashTableTutorial(),
+        onComplete = { }
+    )
 
     BaseStructureScreen("Hash Table", onBackClick, modifier) {
         Card(

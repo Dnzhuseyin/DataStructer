@@ -21,6 +21,13 @@ fun HuffmanScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var inputValue by remember { mutableStateOf("") }
     var showExplanations by remember { mutableStateOf(true) }
 
+    // Show tutorial on first visit
+    ShowScreenTutorial(
+        screenName = "huffman_coding",
+        steps = ScreenTutorials.getHuffmanCodingTutorial(),
+        onComplete = { }
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
